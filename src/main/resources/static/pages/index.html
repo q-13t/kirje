@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="icon" href="../icons/Kirje send & logo.svg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="js/index.js"></script>
+    <title>Kirje</title>
+</head>
+
+<body class="primaryColorBackground">
+    <div id="chatSection" class="smallMar">
+        <!-- <div class="InMessage" id="responseMessage">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ipsa praesentium, commodi ab ipsam beatae
+                eius perspiciatis. Quis aperiam, natus, omnis ducimus facilis quidem obcaecati at quos minima earum
+                voluptate!</p>
+        </div>
+        <div class="OutMessage">
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et delectus fugit eligendi quasi nihil ex
+                impedit necessitatibus vero, beatae nobis mollitia cumque laboriosam autem id voluptatibus voluptate,
+                iste esse explicabo?
+                Pariatur aperiam rerum quasi, maxime officia quis vitae eveniet commodi maiores cum magni aliquid
+                nesciunt! Excepturi beatae laudantium harum pariatur atque unde animi fuga natus, molestias, fugiat
+                temporibus quo minima.
+                Iste, quas aspernatur minus ipsum perferendis, et dolorum veritatis accusamus animi accusantium
+                voluptatum blanditiis temporibus delectus odio magni aliquid nihil. In vel ipsa commodi voluptatum
+                minus? Nulla dolor animi tempora.
+                Iure, delectus! Maxime iusto eaque dolorem architecto nemo, accusamus est non vel facere ullam?
+                Accusantium at explicabo modi. Facilis iusto esse necessitatibus, accusantium maiores voluptatum officia
+                sit dicta quo architecto!
+                Id doloribus aspernatur ducimus culpa repudiandae alias nihil iusto ipsum! Quas dignissimos, magni alias
+                similique culpa molestias eligendi corporis eveniet magnam, dolore voluptatum eum sed iste maiores!
+                Minima, harum illo.</p>
+        </div>
+        <div class="InMessage">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit consequuntur vero dicta vitae
+                aspernatur, eveniet quibusdam facilis itaque autem deserunt architecto nam eos ut reprehenderit libero
+                quis id quae quisquam.</p>
+        </div>
+        <div class="OutMessage">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo deserunt vel incidunt quis? Optio pariatur
+                obcaecati debitis expedita vel? Dolorum doloribus magnam harum, dolorem assumenda repellat porro animi
+                esse quas?</p>
+        </div>
+        <div class="InMessage">
+            <p>IN MESSAGE</p>
+        </div> -->
+    </div>
+    <div id="inputSection">
+        <form id="inputForm">
+            <input class="secondaryColorBackground smallMar" type="file" name="fileInput" id="fileButton"
+                src="../icons/Kirje Pin.svg">
+            <textarea class="secondaryColorBackground smallMar" name="textAreaInput" id="inputText" rows="1"
+                placeholder="Enter Text"></textarea>
+            <button class="secondaryColorBackground smallMar" type="button" onclick="sendMessage()"
+                id="sendMessageButton"><img src="../icons/Kirje send & logo.svg" alt=""></button>
+        </form>
+    </div>
+</body>
+
+</html>
