@@ -41,12 +41,6 @@ body {
     width: 100%;
 }
 
-#navigation {
-    width: 100vw;
-    height: 7vh;
-    background: red;
-}
-
 form#inputForm {
     display: flex;
     justify-content: space-between;
@@ -60,7 +54,16 @@ form button {
     outline: none;
 }
 
+#inputForm #fileButton {
+    display: none;
+}
 
+img,
+#SelectedFile {
+    cursor: pointer;
+    scale: 1/1;
+    height: inherit;
+}
 
 #inputForm textarea {
     width: 100%;
@@ -81,7 +84,8 @@ form button {
     margin: 1%;
 }
 
-#inputText {
+#inputText,
+#SelectedFile {
     color: white;
 }
 

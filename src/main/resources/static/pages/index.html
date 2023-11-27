@@ -9,7 +9,7 @@
     <link rel="icon" href="../icons/Kirje send & logo.svg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="js/index.js"></script>
+    <script src="../js/index.js"></script>
     <title>Kirje</title>
 </head>
 
@@ -53,12 +53,19 @@
     </div>
     <div id="inputSection">
         <form id="inputForm">
-            <input class="secondaryColorBackground smallMar" type="file" name="fileInput" id="fileButton"
-                src="../icons/Kirje Pin.svg">
+            <label for="fileButton" class="secondaryColorBackground smallMar">
+                <img id="fileIcon" src="../icons/Kirje Pin.svg" alt="" srcset="">
+            </label>
+            <input type="file" name="fileInput" id="fileButton" onchange="displayFileNames()">
+            <div id="SelectedFile" class="secondaryColorBackground smallMar" style="visibility: hidden;"
+                onclick="ClearFileSelection()">
+            </div>
             <textarea class="secondaryColorBackground smallMar" name="textAreaInput" id="inputText" rows="1"
                 placeholder="Enter Text"></textarea>
-            <button class="secondaryColorBackground smallMar" type="button" onclick="sendMessage()"
-                id="sendMessageButton"><img src="../icons/Kirje send & logo.svg" alt=""></button>
+            <label for="sendMessageButton" class="secondaryColorBackground smallMar">
+                <img src="../icons/Kirje send & logo.svg" alt="">
+            </label>
+            <button type="button" onclick="sendMessage()" id="sendMessageButton"></button>
         </form>
     </div>
 </body>
