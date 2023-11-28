@@ -53,13 +53,22 @@
     </div>
     <div id="inputSection">
         <form id="inputForm">
+            <div id="SelectedFiles" class="secondaryColorBackground" style="visibility: hidden;">
+                <li id="FileList">
+                    <!-- onclick="ClearFileSelection()" -->
+                    <!-- <ul>abc</ul>
+                    <ul>abc</ul>
+                    <ul>abc</ul>
+                    <ul>abc</ul>
+                    <ul>abc</ul> -->
+                </li>
+                <button type="button" id="FileListExpansionBtn" onclick="setListSize()">YES</button>
+            </div>
             <label for="fileButton" class="secondaryColorBackground smallMar">
                 <img id="fileIcon" src="../icons/Kirje Pin.svg" alt="" srcset="">
             </label>
-            <input type="file" name="fileInput" id="fileButton" onchange="displayFileNames()">
-            <div id="SelectedFile" class="secondaryColorBackground smallMar" style="visibility: hidden;"
-                onclick="ClearFileSelection()">
-            </div>
+            <input type="file" multiple="multiple" name="fileInput" id="fileButton" onchange="displayFileNames()">
+
             <textarea class="secondaryColorBackground smallMar" name="textAreaInput" id="inputText" rows="1"
                 placeholder="Enter Text"></textarea>
             <label for="sendMessageButton" class="secondaryColorBackground smallMar">
@@ -67,6 +76,7 @@
             </label>
             <button type="button" onclick="sendMessage()" id="sendMessageButton"></button>
         </form>
+    </div>
     </div>
 </body>
 

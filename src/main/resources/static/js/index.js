@@ -1,5 +1,3 @@
-
-
 function sendMessage(event) {
     // Get form data
     const formData = new FormData(document.getElementById('inputForm'));
@@ -20,12 +18,12 @@ function sendMessage(event) {
                 div.className = "OutMessage";
 
                 if (FileButtonEl.value != '') {
-                    const reader = new FileReader();
                     const img = document.createElement("img");
-                    reader.onload = () => {
-                        img.src = reader.result;
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        img.src = e.target.result;
                     }
-                    // reader.readAsDataURL();
+                    reader.readAsBinaryString(FileButtonEl.files[0])
                     div.appendChild(img);
                     ClearFileSelection();
                 }
@@ -57,15 +55,58 @@ function sendMessage(event) {
 //         // Handle the message as needed
 //     });
 // });
-function displayFileNames() {
-    let SelectedFileEl = document.getElementById("SelectedFile");
-    SelectedFileEl.innerHTML = document.getElementById("fileButton").value;
-    SelectedFileEl.style.visibility = "visible";
 
+function displayFileNames() {
+    let filesLIEl = document.getElementById("FileList");
+    let fileButtonEL = document.getElementById("fileButton");
+    fileArray = Array.from(document.getElementById("fileButton").files);
+    if (fileArray.length = !0) {
+        for (let index = 0; index < fileButtonEL.files.length; index++) {
+            const file = fileButtonEL.files[index];
+            let ulEl = document.createElement("ul");
+            let btnEL = document.createElement("button");
+            btnEL.type = 'button';
+            btnEL.innerHTML = "X";
+            btnEL.addEventListener('click', (event) => {
+                let eventParent = event.target.parentElement;
+                let pointer = 0;
+                for (let index = 0; index < filesLIEl.children.length; index++) {
+                    if (filesLIEl.children[index].id == eventParent.id) {
+                        pointer = index;
+                        break;
+                    }
+                }
+                filesLIEl.removeChild(filesLIEl.children[pointer]);
+                let newFileList = new DataTransfer();
+                for (let index = 0; index < fileButtonEL.files.length; index++) {
+                    if (index != pointer) {
+                        newFileList.items.add(fileButtonEL.files[index]);
+                    }
+                }
+                fileButtonEL.files = newFileList.files;
+                if (filesLIEl.children.length == 0) {
+                    SelectedFiles.style.visibility = "hidden";
+                }
+                console.log(fileButtonEL.files);
+            });
+            ulEl.id = index;
+            ulEl.innerHTML = file.name;
+            ulEl.appendChild(btnEL);
+            filesLIEl.appendChild(ulEl);
+        }
+    }
+    document.getElementById('SelectedFiles').style.visibility = 'visible'
 }
-function ClearFileSelection() {
-    let SelectedFileEl = document.getElementById("SelectedFile");
-    SelectedFileEl.innerHTML = '';
-    SelectedFileEl.style.visibility = "hidden";
-    document.getElementById("fileButton").value = '';
+
+function setListSize() {
+    let filesEl = document.getElementById("FileList");
+    if (filesEl.children[0].style.display == 'block' || window.getComputedStyle(filesEl.children[0], null).display == 'block') {
+        for (let index = 0; index < filesEl.children.length - 1; index++) {
+            filesEl.children[index].style.display = 'none';
+        }
+    } else {
+        for (let index = 0; index < filesEl.children.length; index++) {
+            filesEl.children[index].style.display = 'block';
+        }
+    }
 }

@@ -10,6 +10,8 @@
 body {
     display: flex;
     height: 100vh;
+    max-height: 100vh;
+    min-height: 20vh;
     margin: 0%;
     padding: 0vh 25vw 0vh 25vw;
     flex-direction: column;
@@ -58,8 +60,7 @@ form button {
     display: none;
 }
 
-img,
-#SelectedFile {
+img {
     cursor: pointer;
     scale: 1/1;
     height: inherit;
@@ -85,7 +86,7 @@ img,
 }
 
 #inputText,
-#SelectedFile {
+#SelectedFiles {
     color: white;
 }
 
@@ -100,6 +101,39 @@ div#chatSection {
     align-content: space-between;
     justify-content: flex-start;
     align-items: stretch;
+}
+
+#SelectedFiles {
+    position: absolute;
+    left: 8vw;
+    width: 15vw;
+    bottom: 1vh;
+    height: inherit;
+    display: inline-block;
+    list-style: simp-chinese-formal;
+}
+
+#FileListExpansionBtn,
+#FileList {
+    display: inline-block;
+}
+
+#FileList {
+    width: 75%;
+    list-style-type: none;
+    max-width: 75%;
+}
+
+#FileListExpansionBtn {
+    position: absolute;
+    top: 0%;
+    text-align: end;
+    height: 100%;
+}
+
+ul {
+    margin: 1vh 0.5vw 1vh 0.5vw;
+    padding: 0%;
 }
 
 .InMessage {
