@@ -16,24 +16,42 @@ function sendMessage(event) {
 
                 const div = document.createElement("div");
                 div.className = "OutMessage";
-
-                if (FileButtonEl.value != '') {
-                    const img = document.createElement("img");
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        img.src = e.target.result;
+                console.log(FileButtonEl.files.length);
+                if (FileButtonEl.files.length != 0) {
+                    for (let index = 0; index < FileButtonEl.files.length; index++) {
+                        const file = FileButtonEl.files[index];
+                        const fileFormat = file.name.split('.')[1];
+                        switch (fileFormat) {
+                            case 'png':
+                            case 'jpg':
+                                let img = document.createElement("img");
+                                img.file = file;
+                                div.appendChild(img);
+                                const reader = new FileReader();
+                                reader.onload = (e) => {
+                                    img.src = e.target.result;
+                                };
+                                reader.readAsDataURL(file);
+                                break;
+                            case 'mp4':
+                                let vid = document.createElement('video');
+                                const ojbURL = URL.createObjectURL(file);
+                                vid.src = ojbURL;
+                                vid.controls = true;
+                                div.appendChild(vid);
+                                URL.revokeObjectURL(file);
+                                break;
+                            default:
+                                break;
+                        }
+                        clearFileList();
                     }
-                    reader.readAsBinaryString(FileButtonEl.files[0])
-                    div.appendChild(img);
-                    ClearFileSelection();
                 }
-
                 if (inputTextEl.value != '') {
                     const par = document.createElement("p");
                     par.innerHTML = inputTextEl.value;
                     div.appendChild(par);
                 }
-
                 document.getElementById('chatSection').appendChild(div);
 
                 FileButtonEl.value = '';
@@ -44,6 +62,11 @@ function sendMessage(event) {
             });
     }
 }
+function clearFileList() {
+    document.getElementById('SelectedFiles').style.visibility = "hidden";
+    document.getElementById("FileList").innerHTML = '';
+}
+
 // var socket = new SockJS('/gs-guide-websocket');
 // var stompClient = Stomp.over(socket);
 

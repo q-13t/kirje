@@ -161,3 +161,15 @@ ul {
     margin-top: 1vh;
     margin-bottom: 1vh;
 }
+
+.OutMessage img,
+.InMessage img {
+    max-width: 25vw;
+    max-height: 20vw;
+}
+
+.OutMessage video,
+.InMessage video {
+    width: 100%;
+    height: auto;
+}

@@ -1,6 +1,9 @@
 package edu.chat.kirje.controller;
 
 import org.springframework.ui.Model;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,10 +20,13 @@ public class OutController {
     }
 
     @RequestMapping(path = "/api/submit", method = RequestMethod.POST)
-    public ResponseEntity<String> handleFormData(@RequestPart(name = "fileInput", required = false) MultipartFile file,
+    public ResponseEntity<String> handleFormData(
+            @RequestPart(name = "fileInput", required = false) List<MultipartFile> files,
             @RequestPart(name = "textAreaInput", required = false) String textAreaInput) {
         // Process the file and text data as needed
-        System.out.println("Received file: " + file.getOriginalFilename());
+        for (int index = 0; index < files.size(); index++) {
+            System.out.println("Received file: " + files.get(index).getOriginalFilename());
+        }
         System.out.println("Received text: " + textAreaInput);
 
         // Return a response
