@@ -1,3 +1,15 @@
+document.addEventListener("keyup", event => {
+    //console.log(event.key);
+    if (event.shiftKey && event.key == 'Enter') {
+        // console.log("Shift + Enter");
+        document.getElementById("sendMessageButton").click();
+    } else if (!event.shiftKey && event.key == 'Enter') {
+        //     console.log("Enter");
+        document.getElementById("inputText").append('\n');
+    }
+}
+)
+
 function sendMessage(event) {
     // Get form data
     const formData = new FormData(document.getElementById('inputForm'));
