@@ -39,7 +39,7 @@
             <div id="SelectedFiles" class="secondaryColorBackground" style="visibility: hidden;">
                 <li id="FileList">
                 </li>
-                <button type="button" id="FileListExpansionBtn" onclick="setListSize()">YES</button>
+                <button type="button" id="FileListExpansionBtn" onclick="setListSize()">Collapse</button>
             </div>
             <label for="fileButton" class="secondaryColorBackground smallMar">
                 <img id="fileIcon" src="../icons/Kirje Pin.svg" alt="" srcset="">
@@ -48,7 +48,7 @@
 
             <textarea class="secondaryColorBackground smallMar" name="textAreaInput" id="inputText" rows="1"
                 placeholder="Enter Text"></textarea>
-            <label for="sendMessageButton" class="secondaryColorBackground smallMar">
+            <label id="sendLabel" for="sendMessageButton" class="secondaryColorBackground smallMar">
                 <img src="../icons/Kirje send & logo.svg" alt="">
             </label>
             <button type="button" onclick="sendMessage()" id="sendMessageButton"></button>

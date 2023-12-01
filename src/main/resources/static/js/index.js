@@ -100,6 +100,7 @@ function displayFileNames() {
             const file = fileButtonEL.files[index];
             let ulEl = document.createElement("ul");
             let btnEL = document.createElement("button");
+            let pEL = document.createElement("p");
             btnEL.type = 'button';
             btnEL.innerHTML = "X";
             btnEL.addEventListener('click', (event) => {
@@ -121,11 +122,14 @@ function displayFileNames() {
                 fileButtonEL.files = newFileList.files;
                 if (filesLIEl.children.length == 0) {
                     SelectedFiles.style.visibility = "hidden";
+                } else {
+                    setListSize()
                 }
-                console.log(fileButtonEL.files);
+
             });
             ulEl.id = index;
-            ulEl.innerHTML = file.name;
+            pEL.innerHTML = file.name;
+            ulEl.appendChild(pEL);
             ulEl.appendChild(btnEL);
             filesLIEl.appendChild(ulEl);
         }
@@ -135,13 +139,15 @@ function displayFileNames() {
 
 function setListSize() {
     let filesEl = document.getElementById("FileList");
-    if (filesEl.children[0].style.display == 'block' || window.getComputedStyle(filesEl.children[0], null).display == 'block') {
+    if (filesEl.children[0].style.display == 'flex' || window.getComputedStyle(filesEl.children[0], null).display == 'flex') {//collapses
         for (let index = 0; index < filesEl.children.length - 1; index++) {
             filesEl.children[index].style.display = 'none';
         }
-    } else {
+        document.getElementById("FileListExpansionBtn").innerHTML = "Expand"
+    } else {//Expands
         for (let index = 0; index < filesEl.children.length; index++) {
-            filesEl.children[index].style.display = 'block';
+            filesEl.children[index].style.display = 'flex';
         }
+        document.getElementById("FileListExpansionBtn").innerHTML = "Collapse"
     }
 }
