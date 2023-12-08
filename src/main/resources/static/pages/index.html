@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -15,24 +15,6 @@
 
 <body class="primaryColorBackground">
     <div id="chatSection" class="smallMar">
-        <!-- <div class="InMessage" id="responseMessage">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ipsa praesentium, commodi ab ipsam beatae
-                eius perspiciatis. Quis aperiam, natus, omnis ducimus facilis quidem obcaecati at quos minima earum
-                voluptate!</p>
-        </div>
-        <div class="InMessage">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit consequuntur vero dicta vitae
-                aspernatur, eveniet quibusdam facilis itaque autem deserunt architecto nam eos ut reprehenderit libero
-                quis id quae quisquam.</p>
-        </div>
-        <div class="OutMessage">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo deserunt vel incidunt quis? Optio pariatur
-                obcaecati debitis expedita vel? Dolorum doloribus magnam harum, dolorem assumenda repellat porro animi
-                esse quas?</p>
-        </div>
-        <div class="InMessage">
-            <p>IN MESSAGE</p>
-        </div> -->
     </div>
     <div id="inputSection">
         <form id="inputForm">
@@ -56,5 +38,11 @@
     </div>
     </div>
 </body>
+<script type="text/javascript" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', event => {
+        let el = [[${ server_data }]];
+        console.log(el);
+    });
+</script>
 
 </html>
