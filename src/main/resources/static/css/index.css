@@ -203,3 +203,9 @@ ul p {
     max-width: 80%;
     overflow-wrap: break-word;
 }
+
+#qrcode {
+    background: var(--lighterBackground);
+    padding: 5%;
+    margin: 40%;
+}
