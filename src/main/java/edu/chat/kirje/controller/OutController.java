@@ -1,8 +1,6 @@
 package edu.chat.kirje.controller;
 
-import java.net.InetAddress;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
 import edu.chat.kirje.UDPConnector.ServerConnector;
+import edu.chat.kirje.configuration.WEBSocketController;
 
 @Controller
 public class OutController {
+
+    @Autowired
+    private WEBSocketController socketOperator;
 
     @Autowired
     private ServerConnector serverOperator;
@@ -45,13 +45,19 @@ public class OutController {
             System.out.println("Received file: " + files.get(index).getOriginalFilename());
         }
         System.out.println("Received text: " + textAreaInput);
-        // try {
-        // operator.sendMessage(textAreaInput);
-        return ResponseEntity.ok("OK");
+        // ###################################################
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+                // socketOperator.sendMessage("SECRETS");
+                socketOperator.sendFiles();
+                System.out.println("HERE");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        // ###################################################
+        return ResponseEntity.ok("KO");
 
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // return ResponseEntity.ok("NOT OK");
-        // }
     }
 }

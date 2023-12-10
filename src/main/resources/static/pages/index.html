@@ -15,15 +15,14 @@
 </head>
 
 <body class="primaryColorBackground">
-    <div id="qrcode">
-
+    <div id="qrcode" style="display: none;">
     </div>
 
     <div id="chatSection" class="smallMar">
     </div>
     <div id="inputSection">
         <form id="inputForm">
-            <div id="SelectedFiles" class="secondaryColorBackground" style="visibility: hidden;">
+            <div id="SelectedFiles" class="secondaryColorBackground" style="">
                 <li id="FileList">
                 </li>
                 <button type="button" id="FileListExpansionBtn" onclick="setListSize()">Collapse</button>
@@ -47,8 +46,9 @@
 </body>
 <script type="text/javascript" th:inline="javascript">
     document.addEventListener('DOMContentLoaded', event => {
-        document.getElementById("chatSection").style.display = 'none';
-        document.getElementById("inputSection").style.display = 'none';
+        // REMEMBER: UNCOMMENT LATER
+        // document.getElementById("chatSection").style.display = 'none';
+        // document.getElementById("inputSection").style.display = 'none';
         let el = [[${ server_data }]];
         var qrcode = new QRCode("qrcode", {
             text: "kirje://extraString" + el,

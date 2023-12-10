@@ -79,17 +79,25 @@ function clearFileList() {
     document.getElementById("FileList").innerHTML = '';
 }
 
-// var socket = new SockJS('/gs-guide-websocket');
-// var stompClient = Stomp.over(socket);
+var socket = new SockJS('/gs-guide-websocket');
+var stompClient = Stomp.over(socket);
 
-// stompClient.connect({}, function (frame) {
-//     console.log('Connected: ' + frame);
-//     stompClient.subscribe('/topic/greetings', function (greeting) {
-//         var message = JSON.parse(greeting.body).content;
-//         console.log('Received message: ' + message);
-//         // Handle the message as needed
-//     });
-// });
+// TODO: Implement differentiation of incoming data
+stompClient.connect({}, function (frame) {
+    console.log('Connected: ' + frame);
+    stompClient.subscribe('/topic/greetings', function (message) {
+        console.log('Received message: ' + message.body);
+        // Handle the message as needed
+        displayImage(message.body);
+    });
+});
+
+//TODO: Implement INMEssage function based on this
+function displayImage(value) {
+    var image = new Image();
+    image.src = 'data:image/png;base64,' + value;
+    document.body.appendChild(image);
+}
 
 function displayFileNames() {
     let filesLIEl = document.getElementById("FileList");
