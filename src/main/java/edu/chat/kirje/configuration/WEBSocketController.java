@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -22,11 +24,18 @@ public class WEBSocketController {
         this.template.convertAndSend("/topic/greetings", message);
     }
 
+    // TODO: Create dynamic file addition
     public void sendFiles() {
         try {
-            byte[] img = Files.readAllBytes(Paths.get("C:\\Users\\vova2\\Desktop\\ln'jkh.png"));
-            String base64Image = Base64.getEncoder().encodeToString(img);
-            this.template.convertAndSend("/topic/greetings", base64Image);
+            JSONObject payload = new JSONObject();
+            JSONObject files = new JSONObject();
+            JSONArray array = new JSONArray();
+            files.put("img", Base64.getEncoder()
+                    .encodeToString(Files.readAllBytes(Paths.get("C:\\Users\\vova2\\Desktop\\ln'jkh.png"))));
+            array.put(files);
+            payload.put("Files", array);
+            payload.put("Text", "Some TEXT");
+            this.template.convertAndSend("/topic/greetings", payload.toString());
         } catch (IOException e) {
             LOGGER.error("Error Sending data to WEB client:", e);
         }

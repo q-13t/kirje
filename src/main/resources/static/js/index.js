@@ -1,11 +1,8 @@
 document.addEventListener("keyup", event => {
-    //console.log(event.key);
     if (event.shiftKey && event.key == 'Enter') {
-        // console.log("Shift + Enter");
-        document.getElementById("sendMessageButton").click();
-    } else if (!event.shiftKey && event.key == 'Enter') {
-        //     console.log("Enter");
         document.getElementById("inputText").append('\n');
+    } else if (!event.shiftKey && event.key == 'Enter') {
+        document.getElementById("sendMessageButton").click();
     }
 }
 )
@@ -81,23 +78,55 @@ function clearFileList() {
 
 var socket = new SockJS('/gs-guide-websocket');
 var stompClient = Stomp.over(socket);
-
-// TODO: Implement differentiation of incoming data
-stompClient.connect({}, function (frame) {
-    console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/greetings', function (message) {
-        console.log('Received message: ' + message.body);
-        // Handle the message as needed
-        displayImage(message.body);
+function subscribeSocket(params) {
+    // TODO: Implement differentiation of incoming data
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        layoutToChat();
+        stompClient.subscribe('/topic/greetings', function (message) {
+            // console.log('Received message: ' + message.body);
+            displayIncomingMessage(JSON.parse(message.body));
+        });
     });
-});
-
-//TODO: Implement INMEssage function based on this
-function displayImage(value) {
-    var image = new Image();
-    image.src = 'data:image/png;base64,' + value;
-    document.body.appendChild(image);
 }
+subscribeSocket();
+
+function displayIncomingMessage(json) {
+    const div = document.createElement("div");
+    div.className = "InMessage";
+    if (json.Files != '') {
+        for (const file of json.Files) {
+            const value = Object.values(file)[0];
+            switch (Object.keys(file)[0]) {
+                case 'png':
+                case 'img':
+                case 'jpg':
+                    let img = document.createElement("img");
+                    img.src = 'data:image/png;base64,' + value;
+                    div.appendChild(img);
+                    break;
+                case 'vid':
+                case 'mp4':
+                    let vid = document.createElement('video');
+                    const ojbURL = URL.createObjectURL(value);
+                    vid.src = ojbURL;
+                    vid.controls = true;
+                    div.appendChild(vid);
+                    URL.revokeObjectURL(value);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    if (json.Text != '') {
+        const par = document.createElement("p");
+        par.innerHTML = json.Text;
+        div.appendChild(par);
+    }
+    document.getElementById('chatSection').appendChild(div);
+}
+
 
 function displayFileNames() {
     let filesLIEl = document.getElementById("FileList");
@@ -158,4 +187,10 @@ function setListSize() {
         }
         document.getElementById("FileListExpansionBtn").innerHTML = "Collapse"
     }
+}
+
+function layoutToChat() {
+    document.getElementById("chatSection").style.display = 'flex';
+    document.getElementById("inputSection").style.display = 'block';
+    document.getElementById("qrcode").style.display = 'none';
 }
