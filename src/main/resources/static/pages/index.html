@@ -50,7 +50,7 @@
         document.getElementById("inputSection").style.display = 'none';
         let el = [[${ server_data }]];
         var qrcode = new QRCode("qrcode", {
-            text: "kirje://extraString" + el,
+            text: "https://kirje/" + el,
             colorDark: "#000000",
             colorLight: "#ffffff",
         }

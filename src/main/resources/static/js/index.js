@@ -76,15 +76,18 @@ function clearFileList() {
     document.getElementById("FileList").innerHTML = '';
 }
 
-var socket = new SockJS('/gs-guide-websocket');
+var socket = new SockJS('/kirje');
 var stompClient = Stomp.over(socket);
 function subscribeSocket(params) {
     // TODO: Implement differentiation of incoming data
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        layoutToChat();
-        stompClient.subscribe('/topic/greetings', function (message) {
-            // console.log('Received message: ' + message.body);
+        // layoutToChat();
+        let notify = stompClient.subscribe('/chat/notify', function (params) {
+            layoutToChat();
+            notify.unsubscribe();
+        });
+        let chat = stompClient.subscribe('/chat/WEB', function (message) {
             displayIncomingMessage(JSON.parse(message.body));
         });
     });
