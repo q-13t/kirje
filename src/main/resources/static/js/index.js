@@ -1,3 +1,23 @@
+var socket = new SockJS('/kirje');
+var stompClient = Stomp.over(socket);
+let chat;
+let notify;
+function subscribeSocket(params) {
+    // TODO: Implement differentiation of incoming data
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        // layoutToChat();
+        notify = stompClient.subscribe('/chat/WEBNotify', function (params) {
+            layoutToChat();
+        });
+        chat = stompClient.subscribe('/chat/WEB', function (message) {
+            displayIncomingMessage(JSON.parse(message.body));
+        });
+
+    });
+}
+subscribeSocket();
+
 document.addEventListener("keyup", event => {
     if (event.shiftKey && event.key == 'Enter') {
         document.getElementById("inputText").append('\n');
@@ -7,6 +27,7 @@ document.addEventListener("keyup", event => {
 }
 )
 
+
 function sendMessage(event) {
     // Get form data
     const formData = new FormData(document.getElementById('inputForm'));
@@ -14,7 +35,6 @@ function sendMessage(event) {
     var inputTextEl = document.getElementById("inputText");
 
     if (FileButtonEl.value != '' || inputTextEl.value != '') {
-        // Send form data to the server
         fetch('/api/submit', {
             method: 'POST',
             body: formData
@@ -71,33 +91,16 @@ function sendMessage(event) {
             });
     }
 }
+
 function clearFileList() {
     document.getElementById('SelectedFiles').style.visibility = "hidden";
     document.getElementById("FileList").innerHTML = '';
 }
 
-var socket = new SockJS('/kirje');
-var stompClient = Stomp.over(socket);
-function subscribeSocket(params) {
-    // TODO: Implement differentiation of incoming data
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        // layoutToChat();
-        let notify = stompClient.subscribe('/chat/notify', function (params) {
-            layoutToChat();
-            notify.unsubscribe();
-        });
-        let chat = stompClient.subscribe('/chat/WEB', function (message) {
-            displayIncomingMessage(JSON.parse(message.body));
-        });
-    });
-}
-subscribeSocket();
-
 function displayIncomingMessage(json) {
     const div = document.createElement("div");
     div.className = "InMessage";
-    if (json.Files != '') {
+    if (json.hasOwnProperty('Files')) {
         for (const file of json.Files) {
             const value = Object.values(file)[0];
             switch (Object.keys(file)[0]) {
