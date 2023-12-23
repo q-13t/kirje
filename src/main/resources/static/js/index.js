@@ -18,14 +18,14 @@ function subscribeSocket(params) {
 }
 subscribeSocket();
 
-document.addEventListener("keyup", event => {
-    if (event.shiftKey && event.key == 'Enter') {
-        document.getElementById("inputText").append('\n');
-    } else if (!event.shiftKey && event.key == 'Enter') {
-        document.getElementById("sendMessageButton").click();
-    }
-}
-)
+// document.addEventListener("keyup", event => {
+//     if (event.shiftKey && event.key == 'Enter') {
+//         document.getElementById("inputText").append('\n');
+//     } else if (!event.shiftKey && event.key == 'Enter') {
+//         document.getElementById("sendMessageButton").click();
+//     }
+// }
+// )
 
 
 function sendMessage(event) {
