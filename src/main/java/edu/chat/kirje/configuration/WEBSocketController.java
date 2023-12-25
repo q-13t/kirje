@@ -13,6 +13,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONObject;
 import org.java_websocket.handshake.ClientHandshake;
 
 import org.slf4j.Logger;
@@ -50,10 +51,14 @@ public class WEBSocketController extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        conn.send("Connected to server: " + getServerData()); // This method sends a message to the new client
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("Origin", "server");
+        jsonObj.put("Message", "Connected to server: " + getServerData());
+        conn.send(jsonObj.toString());
+        jsonObj.put("Message", "new connection: " + conn.getRemoteSocketAddress());
         WEBSC.getConnections().forEach(connection -> {
             if (!connection.equals(conn)) {
-                connection.send("new connection: " + conn.getRemoteSocketAddress());
+                connection.send(jsonObj.toString());
             }
         });
         LOGGER.info(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the room!");
@@ -61,10 +66,14 @@ public class WEBSocketController extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        broadcast(conn + " has left the room!");
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("Origin", "server");
+        jsonObj.put("Message", conn.getRemoteSocketAddress() + " has left the room!");
+        broadcast(jsonObj.toString());
         if (WEBSC.getConnections().size() == 1) {
             WEBSC.getConnections().forEach(x -> {
-                x.send("Last Connection");
+                jsonObj.put("Message", "Last Connection");
+                x.send(jsonObj.toString());
             });
         }
         LOGGER.info(conn.getRemoteSocketAddress() + " has left the room!");
