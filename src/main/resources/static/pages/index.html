@@ -12,9 +12,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="../js/index.js"></script>
     <title>Kirje</title>
+
 </head>
 
 <body class="primaryColorBackground">
+    <input type="hidden" th:value="${server_data}" th:id="server_data">
     <div id="qrcode">
     </div>
 
@@ -44,19 +46,5 @@
 
 
 </body>
-<script type="text/javascript" th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', event => {
-        document.getElementById("chatSection").style.display = 'none';
-        document.getElementById("inputSection").style.display = 'none';
-        let el = [[${ server_data }]];
-        var qrcode = new QRCode("qrcode", {
-            text: "https://kirje/" + el,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-        }
-        );
-        console.log('Server Data: [' + el + ']');
-    });
-</script>
 
 </html>
