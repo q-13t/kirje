@@ -17,7 +17,10 @@
 
 <body class="primaryColorBackground">
     <input type="hidden" th:value="${server_data}" th:id="server_data">
-    <div id="qrcode">
+    <div id="qrbox">
+        <div id="qrcode">
+        </div>
+        <input id="qrbtn" type="button" value="Hide QR Code" onclick="QRManager()">
     </div>
 
     <div id="chatSection" class="smallMar">

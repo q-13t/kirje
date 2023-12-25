@@ -53,9 +53,9 @@ public class WEBSocketController extends WebSocketServer {
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("Origin", "server");
-        jsonObj.put("Message", "Connected to server: " + getServerData());
+        jsonObj.put("Info", "Connected to server: " + getServerData());
         conn.send(jsonObj.toString());
-        jsonObj.put("Message", "new connection: " + conn.getRemoteSocketAddress());
+        jsonObj.put("Info", conn.getRemoteSocketAddress() + " has connected!");
         WEBSC.getConnections().forEach(connection -> {
             if (!connection.equals(conn)) {
                 connection.send(jsonObj.toString());
@@ -68,11 +68,11 @@ public class WEBSocketController extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("Origin", "server");
-        jsonObj.put("Message", conn.getRemoteSocketAddress() + " has left the room!");
+        jsonObj.put("Info", conn.getRemoteSocketAddress() + " has left the room!");
         broadcast(jsonObj.toString());
         if (WEBSC.getConnections().size() == 1) {
             WEBSC.getConnections().forEach(x -> {
-                jsonObj.put("Message", "Last Connection");
+                jsonObj.put("Info", "Last Connection");
                 x.send(jsonObj.toString());
             });
         }
@@ -81,9 +81,12 @@ public class WEBSocketController extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Origin", conn.getRemoteSocketAddress());
+        jsonObject.put("Message", new JSONObject(message));
         WEBSC.getConnections().forEach(connection -> {
             if (!connection.equals(conn)) {
-                connection.send(message);
+                connection.send(jsonObject.toString());
             }
         });
         LOGGER.info("Client: " + conn + " send message.");
