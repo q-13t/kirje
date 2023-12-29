@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 import java.util.Random;
+import java.util.Collection;
 import java.util.Collections;
 
 import org.java_websocket.WebSocket;
@@ -34,7 +35,29 @@ public class WEBSocketController extends WebSocketServer {
     public WEBSocketController() throws UnknownHostException, SocketException {
         WEBSC = new WEBSocketController(new InetSocketAddress(OutController.getInetAddresses(), new Random().nextInt(4_000, 10_000)));
         WEBSC.start();
+        WEBSC.setConnectionLostTimeout(60_000);
         LOGGER.info("ChatServer started on port: " + WEBSC.getAddress().getAddress().getHostAddress() + ":" + WEBSC.getPort());
+        Thread connectionStatusThread = new Thread() {
+            @Override
+            public void run() {
+                StringBuilder SB = new StringBuilder();
+                while (true) {
+                    try {
+                        Thread.sleep(60_000);
+                    } catch (InterruptedException e) {
+                    }
+                    SB.replace(0, SB.length(), "");
+                    Collection<WebSocket> connections = WEBSC.getConnections();
+                    SB.append("Server Connections: [" + connections.size() + "]\n");
+                    for (WebSocket webSocketWorker : connections) {
+                        SB.append(webSocketWorker.getRemoteSocketAddress() + "\n");
+                    }
+                    LOGGER.info(SB.toString());
+                }
+            }
+        };
+        connectionStatusThread.setDaemon(true);
+        connectionStatusThread.start();
     }
 
     public WEBSocketController(int port) throws UnknownHostException {
@@ -81,9 +104,9 @@ public class WEBSocketController extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject(message);
         jsonObject.put("Origin", conn.getRemoteSocketAddress());
-        jsonObject.put("Message", new JSONObject(message));
+        // jsonObject.put("Message", new JSONObject(message));
         WEBSC.getConnections().forEach(connection -> {
             if (!connection.equals(conn)) {
                 connection.send(jsonObject.toString());
@@ -99,7 +122,7 @@ public class WEBSocketController extends WebSocketServer {
                 connection.send(message.array());
             }
         });
-        LOGGER.info("Client: " + conn + " send message.");
+        LOGGER.info("Client: " + conn.getRemoteSocketAddress() + " send message.");
     }
 
     @Override

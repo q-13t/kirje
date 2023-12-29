@@ -23,6 +23,7 @@
         <input id="qrbtn" type="button" value="Hide QR Code" onclick="QRManager()">
     </div>
 
+
     <div id="chatSection" class="smallMar">
     </div>
     <div id="inputSection">
@@ -35,7 +36,8 @@
             <label for="fileButton" class="secondaryColorBackground smallMar">
                 <img id="fileIcon" src="../icons/Kirje Pin.svg" alt="" srcset="">
             </label>
-            <input type="file" multiple="multiple" name="fileInput" id="fileButton" onchange="displayFileNames()">
+            <input type="file" accept=".mp4, .jpg, .jpeg, .png" multiple="multiple" name="fileInput" id="fileButton"
+                onchange="displayFileNames()">
 
             <textarea class="secondaryColorBackground smallMar" name="textAreaInput" id="inputText" rows="1"
                 placeholder="Enter Text"></textarea>

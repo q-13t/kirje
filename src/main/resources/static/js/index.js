@@ -1,13 +1,11 @@
 let socket;
-
 document.addEventListener('DOMContentLoaded', event => {
     let el = document.getElementById('server_data').value;
-    var qrcode = new QRCode("qrcode", {
+    new QRCode("qrcode", {
         text: "https://kirje/" + el,
         colorDark: "#000000",
         colorLight: "#ffffff",
-    }
-    );
+    });
     console.log('Server Data: [' + el + ']');
     socket = new WebSocket("ws://" + el);
     // Connection opened
@@ -31,7 +29,7 @@ document.addEventListener('DOMContentLoaded', event => {
                 displayGeneralMessage(message.Info, true);
                 console.log("DISPLAY LEFT THE ROOM");
             }
-        } else if (message.hasOwnProperty('Message')) {
+        } else {
             displayMessage(message, true)
             console.log("DISPLAY MESSAGE");
         }
@@ -41,6 +39,7 @@ document.addEventListener('DOMContentLoaded', event => {
 function displayFileNames() {
     let filesLIEl = document.getElementById("FileList");
     let fileButtonEL = document.getElementById("fileButton");
+    let files = document.getElementById('SelectedFiles');
     fileArray = Array.from(document.getElementById("fileButton").files);
     if (fileArray.length = !0) {
         for (let index = 0; index < fileButtonEL.files.length; index++) {
@@ -68,10 +67,9 @@ function displayFileNames() {
                 }
                 fileButtonEL.files = newFileList.files;
                 if (filesLIEl.children.length == 0) {
-                    document.getElementById('SelectedFiles').style.display = 'none'
-                } else {
-                    setListSize()
+                    files.style.display = 'none'
                 }
+                files.scroll({ top: files.scrollHeight, behavior: 'smooth' });
             });
             ulEl.id = index;
             pEL.innerHTML = file.name;
@@ -80,7 +78,8 @@ function displayFileNames() {
             filesLIEl.appendChild(ulEl);
         }
     }
-    document.getElementById('SelectedFiles').style.display = 'inline-block';
+    files.style.display = 'inline-block';
+    files.scroll({ top: files.scrollHeight, behavior: 'smooth' });
 }
 
 
@@ -115,10 +114,12 @@ document.addEventListener("keyup", event => {
 )
 
 function clearFileList() {
-    document.getElementById('SelectedFiles').style.visibility = "hidden";
+    // document.getElementById('SelectedFiles').style.visibility = "hidden";
+    document.getElementById('SelectedFiles').style.display = 'none'
     document.getElementById("FileList").innerHTML = '';
     document.getElementById("fileButton").value = '';
 }
+
 
 // TODO: check correctness
 function displayMessage(message, incoming) {
@@ -128,72 +129,50 @@ function displayMessage(message, incoming) {
         let origin = document.createElement('p');
         origin.innerHTML = message.Origin;
         div.appendChild(origin);
-        if (message.Message.hasOwnProperty('Files')) {
-            for (const file of message.Files) {
-                const value = Object.values(file)[0];
-                switch (Object.keys(file)[0]) {
-                    case 'png':
-                    case 'img':
-                    case 'jpg':
-                        let img = document.createElement("img");
-                        img.src = 'data:image/png;base64,' + value;
-                        div.appendChild(img);
-                        break;
-                    case 'vid':
-                    case 'mp4':
-                        let vid = document.createElement('video');
-                        const ojbURL = URL.createObjectURL(value);
-                        vid.src = ojbURL;
-                        vid.controls = true;
-                        div.appendChild(vid);
-                        URL.revokeObjectURL(value);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        if (message.Message.hasOwnProperty('Text') && message.Message.Text != '') {
-            const par = document.createElement("p");
-            par.innerHTML = message.Message.Text;
-            div.appendChild(par);
-        }
     } else {
         div.className = 'OutMessage';
-        if (message.hasOwnProperty('Files')) {
-            for (const file of message.Files) {
-                const value = Object.values(file)[0];
-                switch (Object.keys(file)[0]) {
-                    case 'png':
-                    case 'img':
-                    case 'jpg':
-                        let img = document.createElement("img");
+    }
+    if (message.hasOwnProperty('Files')) {
+        for (const file of message.Files) {
+            const value = Object.values(file)[0];
+            switch (Object.keys(file)[0]) {
+                case 'png':
+                case 'jpeg':
+                case 'jpg':
+                    let img = document.createElement("img");
+                    console.log(value.includes("base64,"));
+                    if (!value.includes("base64,")) {
+                        img.src = "data:image/jpg;base64," + value;
+                    } else {
                         img.src = value;
-                        div.appendChild(img);
-                        break;
-                    case 'vid':
-                    case 'mp4':
-                        let vid = document.createElement('video');
-                        const ojbURL = URL.createObjectURL(value);
-                        vid.src = ojbURL;
-                        vid.controls = true;
-                        div.appendChild(vid);
-                        URL.revokeObjectURL(value);
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    div.appendChild(img);
+                    break;
+                case 'mp4':
+                    let vid = document.createElement('video');
+                    if (!value.includes('base64,')) {
+                        vid.src = "data:video/mp4;base64," + value;
+                    } else {
+                        vid.src = value;
+                    }
+                    vid.controls = true;
+                    div.appendChild(vid);
+                    URL.revokeObjectURL(value);
+                    break;
+                default:
+                    break;
             }
         }
-        if (message.hasOwnProperty('Text') && message.Text != '') {
-            const par = document.createElement("p");
-            par.innerHTML = message.Text;
-            div.appendChild(par);
-        }
     }
-    document.getElementById('chatSection').appendChild(div);
+    if (message.hasOwnProperty('Text') && message.Text != '') {
+        const par = document.createElement("p");
+        par.innerHTML = message.Text;
+        div.appendChild(par);
+    }
+    let chat = document.getElementById('chatSection');
+    chat.appendChild(div);
+    chat.scroll({ top: chat.scrollHeight, behavior: 'smooth' });
 }
-
 function setListSize() {
     let filesEl = document.getElementById("FileList");
     if (filesEl.children[0].style.display == 'flex' || window.getComputedStyle(filesEl.children[0], null).display == 'flex') {//collapses
@@ -207,6 +186,7 @@ function setListSize() {
         }
         document.getElementById("FileListExpansionBtn").innerHTML = "Collapse"
     }
+    filesEl.scroll({ top: filesEl.scrollHeight, behavior: 'smooth' });
 }
 
 const getBase64 = file => new Promise((resolve, reject) => {
@@ -220,13 +200,14 @@ const getBase64 = file => new Promise((resolve, reject) => {
 async function sendMessage(event) {
     var fileButtonEl = document.getElementById("fileButton");
     let inputTextEl = document.getElementById("inputText");
-    if (inputTextEl.value != '' || fileButtonEL.files.length != 0) {
+    if (inputTextEl.value != '' || fileButtonEl.value != '') {
         let data = {};
         if (fileButtonEl.files.length != 0) {
             let Files = [];
             for (let index = 0; index < fileButtonEl.files.length; index++) {
                 let file = {};
-                file[fileButtonEl.files[index].name.split('.')[1]] = await getBase64(fileButtonEl.files[index]);
+                let type = fileButtonEl.files[index].name.split('.');
+                file[type[type.length - 1]] = await getBase64(fileButtonEl.files[index]);
                 Files.push(file);
             }
             data["Files"] = Files;
@@ -238,63 +219,5 @@ async function sendMessage(event) {
         clearFileList();
         displayMessage(data, false);
     }
-
-    // if (FileButtonEl.value != '' || inputTextEl.value != '') {
-    //     socket.send(toString(inputTextEl));
-    // fetch('/api/submit', {
-    //         method: 'POST',
-    //         body: formData
-    //     })
-    //         .then(response => response.text())
-    //         .then(data => {
-    //             console.log('Response from server:', data);
-
-    //             const div = document.createElement("div");
-    //             div.className = "OutMessage";
-    //             console.log(FileButtonEl.files.length);
-    //             if (FileButtonEl.files.length != 0) {
-    //                 for (let index = 0; index < FileButtonEl.files.length; index++) {
-    //                     const file = FileButtonEl.files[index];
-    //                     const fileFormat = file.name.split('.')[1];
-    //                     switch (fileFormat) {
-    //                         case 'png':
-    //                         case 'jpg':
-    //                             let img = document.createElement("img");
-    //                             img.file = file;
-    //                             div.appendChild(img);
-    //                             const reader = new FileReader();
-    //                             reader.onload = (e) => {
-    //                                 img.src = e.target.result;
-    //                             };
-    //                             reader.readAsDataURL(file);
-    //                             break;
-    //                         case 'mp4':
-    //                             let vid = document.createElement('video');
-    //                             const ojbURL = URL.createObjectURL(file);
-    //                             vid.src = ojbURL;
-    //                             vid.controls = true;
-    //                             div.appendChild(vid);
-    //                             URL.revokeObjectURL(file);
-    //                             break;
-    //                         default:
-    //                             break;
-    //                     }
-    //                     clearFileList();
-    //                 }
-    //             }
-    //             if (inputTextEl.value != '') {
-    //                 const par = document.createElement("p");
-    //                 par.innerHTML = inputTextEl.value;
-    //                 div.appendChild(par);
-    //             }
-    //             document.getElementById('chatSection').appendChild(div);
-
-    //             FileButtonEl.value = '';
-    //             inputTextEl.value = '';
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //         });
-    // }
-    // }
 }
+
